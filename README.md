@@ -10,3 +10,5 @@
 #### 클라이언트에서 서버로 메시지를 보내는 방법
 ![image](https://user-images.githubusercontent.com/92084680/172861283-07252cf3-8d22-46ed-8227-52a08e89bfd0.png)
 
+## 6/10
+#### 너무 많은 짐을 짊어진 JSP (유지보수의 지옥)
