@@ -35,7 +35,7 @@ public class FrontControllerServletV3 extends HttpServlet {
             return;
         }
 
-        // paramMap
+        // paramMap을 넘겨주기
         Map<String,String> paramMap = createParmMap(request);
         ModelView mv= controller.process(paramMap);
 
@@ -52,6 +52,7 @@ public class FrontControllerServletV3 extends HttpServlet {
 
     private Map<String, String> createParmMap(HttpServletRequest request) {
         Map<String, String> paramMap = new HashMap<>();
+        // 모든 파라미터 이름들을 다 꺼내와서 parmMap에 다 넣어주기
         request.getParameterNames().asIterator()
                 .forEachRemaining(paramName -> paramMap.put(paramName, request.getParameter(paramName)));
         return paramMap;
