@@ -26,3 +26,37 @@
 이 문제를 해결하려면 컨트롤러 호출 전에 먼저 공통 기능을 처리해야 한다. 소위 수문장 역할을 하는 기능이
 필요하다. 프론트 컨트롤러(Front Controller) 패턴을 도입하면 이런 문제를 깔끔하게 해결할 수 있다.
 (입구를 하나로!)
+
+## 6/12
+![image](https://user-images.githubusercontent.com/92084680/173372473-cc42d18e-3021-46cd-b290-2cd90b32fbb2.png)
+
+>v3컨트롤러는 서블릿 기술을 전혀 사용하지 않는다. 따라서 구현이 매우 단순해지고, 테스트 코드 작성시
+>테스트 하기 쉽다.  HttpServletRequest가 제공하는 파라미터는 프론트 컨트롤러가 paramMap에 담아서 호출해주면 된다.
+>응답 결과로 뷰 이름과 뷰에 전달할 Model 데이터를 포함하는 ModelView 객체를 반환하면 된다.
+```
+private Map<String, String> createParamMap(HttpServletRequest request) {
+ Map<String, String> paramMap = new HashMap<>();
+ request.getParameterNames().asIterator()
+ .forEachRemaining(paramName -> paramMap.put(paramName,
+request.getParameter(paramName)));
+ return paramMap;
+ }
+```
+>HttpServletRequest에서 파라미터 정보를 꺼내서 Map으로 변환한다. 그리고 해당 Map( paramMap )을
+컨트롤러에 전달하면서 호출한다
+
+## 6/13
+![image](https://user-images.githubusercontent.com/92084680/173374195-9d5dadf6-7a8f-48ae-9680-579dc0145a34.png)
+> 기본적인 구조는 v3와 동일, 대신에 컨트롤러가 ``` ModelView``` 를 반환하지 않고 ```ViewName```만 반환.
+```
+public interface ControllerV4 {
+ /**
+ * @param paramMap
+ * @param model
+ * @return viewName
+ */
+ String process(Map<String, String> paramMap, Map<String, Object> model);
+}
+```
+> 인터페이스에 ModelView 가 없음. 리턴값으로 뷰의 이름만 반환해 준다. 
+
