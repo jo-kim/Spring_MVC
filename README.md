@@ -60,3 +60,24 @@ public interface ControllerV4 {
 ```
 > 인터페이스에 ModelView 가 없음. 리턴값으로 뷰의 이름만 반환해 준다. 
 
+## 6/14
+![image](https://user-images.githubusercontent.com/92084680/173533846-9b84878e-ca96-4a6b-8f92-464c3f6090c3.png)
+
+1. 클라이언트 요청이 오면 핸들러 조회 후 맵핑 정보를 살핀 후 핸들러를 처리할 수 있는 핸들로 어댑터를 조회하여 찾아온다.
+2. 어댑터는 handler(컨트롤러)를 호출하고 다음 모델 뷰를 반환 후 뷰네임을 갖고와서 뷰리졸브를 호출한 다음 뷰렌더로 모델을 넘겨준다. 
+
+
+
+> '어댑터 패턴' 을 이용하여 기존에 한가지 방식으로만 사용되었던 프론트컨트롤러 인터페이스를 다양한 방식으로 사용할 수 있게 하였다. 
+>  이전과 다르게 직접 컨트롤러를 맵핑하지 않고 핸들러와 어댑터를 사용하여 URL에 맵핑하여 사용할 수 있게 하였다. 
+```
+ private Object getHandler(HttpServletRequest request) {
+      String requestURI = request.getRequestURI();
+      return handlerMappingMap.get(requestURI);
+       
+ }
+ ```
+ > 핸들러 매핑 정보인 handlerMappingMap 에서 URL에 매핑된 핸들러(컨트롤러) 객체를 찾아서 반환한다.
+ #### 어댑터 호출
+``` ModelView mv = adapter.handle(request, response, handler);```
+ > 어댑터의 ``` handle(request, response, handler)``` 메서드를 통해 실제 어댑터가 호출된다. 어댑터는 handler(컨트롤러)를 호출하고 그 결과를 어댑터에 맞추어 반환한다.
