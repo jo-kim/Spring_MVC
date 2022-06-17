@@ -85,14 +85,14 @@ public interface ControllerV4 {
 ## 6/15
 <img width="719" alt="스크린샷 2022-06-15 오후 7 52 55" src="https://user-images.githubusercontent.com/92084680/173810659-842965b2-9ef9-4bef-8d5c-e7c550aa40bb.png">
 > Spring MVC 의 프론트컨트롤러가 DispatcherServlet
-> ``` DispatcherServlet ``` 도 부모클래스에서 ```HttpServlet``` 을 상속받아서 사용하고 서블릿으로 동작한다.
-> 스프링 부트는 ```DispacherServlet``` 을 서블릿으로 자동으로 등록하면서 모든 경로( urlPatterns="/" )에 대해서 매핑한다.
+> `DispacherServlet`도 부모클래스에서 `HttpServlet` 을 상속받아서 사용하고 서블릿으로 동작한다.
+> 스프링 부트는 `DispacherServlet` 을 서블릿으로 자동으로 등록하면서 모든 경로( urlPatterns="/" )에 대해서 매핑한다.
 
 1. 서블릿이 호출되면 HttpServlet이 제공하는 service()가 호출된다.
 2. Spring MVC는 ```DispacherServlet```의 부모인 ```FrameworkServlet``` 에서 ```service()```를 오버라이드 해두었다.
 3. ```FrameworkServlet.service()``` 를 시작으로 여러 메서드가 호출되면서 ```DispacherServlet.doDispatch()``` 가 호출된다.
 ****
->  ```DispacherServlet.doDispatch()``` 가 하는 일
+>  `DispacherServlet.doDispatch()` 가 하는 일
 1. 핸들러 조회: 핸들러 매핑을 통해 요청 URL에 맵핑된 핸들러(컨트롤러)를 조회한다.
 2. 핸들러를 처리할 수 있는 핸들러 어댑터 조회 
 3. 핸들러 어댑터 실행 - > 핸들러 어댑터를 통한 핸들러 실행 
