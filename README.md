@@ -138,3 +138,88 @@ HttpRequestHandler
 5. view.render() 가 호출되고 InternalResourceView 는 forward() 를 사용해서 JSP를 실행한다.
 
 ##### 가장 우선순위가 높은 핸들러 매핑과 핸들러 어댑터는 RequestMappingHandlerMapping , RequestMappingHandlerAdapter 
+
+### Spring MVC 
+1. 회원등록폼 컨트롤러 
++ RequestMApping
+  + RequestMappingHandlerMapping
+  + RequestMappingHandlerAdapter
+
+```
+@Controller
+public class SpringMemberFormControllerV1 {
+ @RequestMapping("/springmvc/v1/members/new-form")
+ public ModelAndView process() {
+ return new ModelAndView("new-form");
+ }
+}
+``` 
++ @Controller
+  + 스프링이 자동으로 스프링 빈으로 등록
+  + 스프링 MVC에서 애노테이션 기반 컨트롤러로 인식한다.
++ @RequestMapping
+  + 요청 정보를 매핑한다. 해당 URL이 호출되면 이 메서드가 호출된다.
+
+2. 컨트롤러 통합
+> @RequestMapping 을 잘 보면 클래스 단위가 아니라 메서드 단위에 적용된 것을 확인할 수 있다. 따라서
+컨트롤러 클래스를 유연하게 하나로 통합할 수 있다.
++ Controller V2
++ 클래스 레벨에 다음과 같이 @RequestMapping 을 두면 메서드 레벨과 조합이 된다
+``` 
+@Controller
+@RequestMapping("/springmvc/v2/members")
+public class SpringMemberControllerV2 {
+ private MemberRepository memberRepository = MemberRepository.getInstance();
+ @RequestMapping("/new-form")
+ public ModelAndView newForm() {
+ return new ModelAndView("new-form");
+ }
+ @RequestMapping("/save")
+ public ModelAndView save(HttpServletRequest request, HttpServletResponse 
+response) {
+ String username = request.getParameter("username");
+ int age = Integer.parseInt(request.getParameter("age"));
+ Member member = new Member(username, age);
+ memberRepository.save(member);
+ ModelAndView mav = new ModelAndView("save-result");
+ mav.addObject("member", member);
+ return mav;
+ }
+
+ ```
+3. 실용적인 방식의 스프링 MVC
+```
+/**
+ * v3
+ * Model 도입
+ * ViewName 직접 반환
+ * @RequestParam 사용
+ * @RequestMapping -> @GetMapping, @PostMapping
+ */
+@Controller
+@RequestMapping("/springmvc/v3/members")
+public class SpringMemberControllerV3 {
+
+ private MemberRepository memberRepository = MemberRepository.getInstance();
+ 
+ @GetMapping("/new-form")
+ public String newForm() {
+ return "new-form";
+ }
+ 
+ @PostMapping("/save")
+ public String save(
+ @RequestParam("username") String username,
+ @RequestParam("age") int age,
+ Model model) {
+ 
+ Member member = new Member(username, age);
+ memberRepository.save(member);
+ model.addAttribute("member", member);
+ return "save-result";
+ }
+}
+```
++ ViewName 직접 반환 - 뷰의 논리 이름을 반환
++ @RequestParam - 스프링은 HTTP 요청 파라미터를 @RequestParam으로 받을 수 있음
++ @GetMapping, @PostMapping - @RequestMapping은 URL만 매칭하는 것이 아니라 HTTP Method도 함께 구분할 수 있다.
