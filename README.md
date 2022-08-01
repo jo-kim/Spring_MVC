@@ -223,3 +223,4 @@ public class SpringMemberControllerV3 {
 + ViewName 직접 반환 - 뷰의 논리 이름을 반환
 + @RequestParam - 스프링은 HTTP 요청 파라미터를 @RequestParam으로 받을 수 있음
 + @GetMapping, @PostMapping - @RequestMapping은 URL만 매칭하는 것이 아니라 HTTP Method도 함께 구분할 수 있다.
+
